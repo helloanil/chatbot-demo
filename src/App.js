@@ -1,27 +1,31 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
+import { withStyles } from '@material-ui/core/styles';
 
 import configureStore from './store';
-import logo from './logo.svg';
 import 'typeface-roboto';
-import './App.css';
+
+import Welcome from './modules/welcome/Welcome';
+
+const styles = {
+  root: {
+    width: 450,
+    margin: 'auto'
+  }
+};
 
 class App extends Component {
   render() {
+    const { classes } = this.props;
+
     return (
       <Provider store={configureStore()}>
-        <div className="App">
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <h1 className="App-title">Welcome to React</h1>
-          </header>
-          <p className="App-intro">
-            To get started, edit <code>src/App.js</code> and save to reload.
-          </p>
+        <div className={classes.root}>
+          <Welcome />
         </div>
       </Provider>
     );
   }
 }
 
-export default App;
+export default withStyles(styles)(App);
