@@ -12,15 +12,10 @@ const styles = theme => ({
   },
   headline: {
     width: '100%',
-    fontSize: 24,
-    fontWeight: 500
-  },
-  selectAvatarRoot: {},
-  selectAvatarHeadline: {
-    width: '100%',
-    fontSize: 18
-  },
-  selectAvatarSelection: {}
+    fontSize: 32,
+    fontWeight: 500,
+    margin: '30px 0'
+  }
 });
 
 const Welcome = props => (
