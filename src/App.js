@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 
 import configureStore from './store';
 import logo from './logo.svg';
+import 'typeface-roboto';
 import './App.css';
 
 class App extends Component {
