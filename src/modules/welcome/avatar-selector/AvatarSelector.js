@@ -4,26 +4,16 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-import TagFaces from '@material-ui/icons/TagFaces';
-import WbCloudy from '@material-ui/icons/WbCloudy';
-import RestaurantMenu from '@material-ui/icons/RestaurantMenu';
-
 import AvatarGrid from './AvatarGrid';
 
 const styles = {
-  root: {},
-  gridItem: {},
-  headline: {},
-  selector: {}
-};
-
-const renderIcon = iconName => {
-  if (iconName === 'face') {
-    return <TagFaces />;
-  } else if (iconName === 'cloud') {
-    return <WbCloudy />;
-  } else if (iconName === 'menu') {
-    return <RestaurantMenu />;
+  root: {
+    marginBottom: 30
+  },
+  selectAvatarHeadline: {
+    fontSize: 22,
+    fontWeight: 300,
+    margin: '20px 0'
   }
 };
 
@@ -38,9 +28,9 @@ const AvatarSelector = props => (
     </Typography>
     <div className={props.classes.selectAvatarSelection}>
       <Grid container>
-        <AvatarGrid renderIcon={renderIcon('face')} />
-        <AvatarGrid renderIcon={renderIcon('cloud')} />
-        <AvatarGrid renderIcon={renderIcon('menu')} />
+        <AvatarGrid iconName="face" />
+        <AvatarGrid iconName="cloud" />
+        <AvatarGrid iconName="menu" />
       </Grid>
     </div>
   </div>

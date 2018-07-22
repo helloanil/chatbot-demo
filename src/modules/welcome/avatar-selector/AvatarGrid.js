@@ -1,35 +1,84 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { bindActionCreators, compose } from 'redux';
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 
+import { setAvatar } from '../../../store/actions/ChatActions';
+
 import Grid from '@material-ui/core/Grid';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+
+import TagFaces from '@material-ui/icons/TagFaces';
+import WbCloudy from '@material-ui/icons/WbCloudy';
+import RestaurantMenu from '@material-ui/icons/RestaurantMenu';
 
 const styles = {
   root: {
     display: 'flex',
     justifyContent: 'center'
   },
-  avatar: {
-    width: 60,
-    height: 60
+  button: {
+    height: 64,
+    width: 64
   },
   icon: {
-    fontSize: 48
+    fontSize: 36
   }
 };
 
-const AvatarGrid = props => (
-  <Grid item xs={12} sm={4} className={props.classes.root}>
-    <ButtonBase disableRipple disableTouchRipple>
-      <Avatar className={props.classes.avatar}>{props.renderIcon}</Avatar>
-    </ButtonBase>
-  </Grid>
-);
+class AvatarGrid extends Component {
+  onAvatarClick = () => this.props.setAvatar(this.props.name);
+
+  renderIcon = () => {
+    const { iconName, classes } = this.props;
+
+    if (iconName === 'face') {
+      return <TagFaces className={classes.icon} />;
+    } else if (iconName === 'cloud') {
+      return <WbCloudy className={classes.icon} />;
+    } else if (iconName === 'menu') {
+      return <RestaurantMenu className={classes.icon} />;
+    }
+  };
+
+  render() {
+    const { classes } = this.props;
+
+    return (
+      <Grid item xs={12} sm={4} className={classes.root}>
+        <Button
+          className={classes.button}
+          onClick={this.onAvatarClick}
+          variant="fab"
+          color="primary"
+          disableRipple
+          disableTouchRipple
+        >
+          {this.renderIcon(this.props.name, this.props.classes)}
+        </Button>
+      </Grid>
+    );
+  }
+}
 
 AvatarGrid.propTypes = {
-  renderIcon: PropTypes.node.isRequired
+  iconName: PropTypes.string.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(AvatarGrid);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      setAvatar
+    },
+    dispatch
+  );
+
+export default compose(
+  connect(
+    null,
+    mapDispatchToProps
+  ),
+  withStyles(styles)
+)(AvatarGrid);
