@@ -1,16 +1,24 @@
-const TYPES = {
-  INITIAL_TYPE: 'INITIAL_TYPE'
+export const TYPES = {
+  SET_AVATAR: 'SET_AVATAR',
+  SET_MODE: 'SET_MODE'
 };
 
-const initialState = {
-  initialField: null
+const initalState = {
+  avatar: null,
+  mode: null
 };
 
-export default (state = initialState, action) => {
+export default (state = initalState, action) => {
   switch (action.type) {
-    case TYPES.INITIAL_TYPE:
+    case TYPES.SET_AVATAR:
       return {
-        result: action.payload
+        ...state,
+        avatar: action.payload
+      };
+    case TYPES.SET_MODE:
+      return {
+        ...state,
+        mode: action.payload
       };
     default:
       return state;
