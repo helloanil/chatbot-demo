@@ -3,8 +3,6 @@ import { withStyles } from '@material-ui/core/styles';
 
 import Typography from '@material-ui/core/Typography';
 
-import AvatarSelector from './avatar-selector/AvatarSelector';
-
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -27,7 +25,6 @@ const Welcome = props => (
     >
       Welcome to Chatbot
     </Typography>
-    <AvatarSelector />
   </div>
 );
 
