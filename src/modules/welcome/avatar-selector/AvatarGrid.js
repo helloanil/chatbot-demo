@@ -28,7 +28,23 @@ const styles = {
 };
 
 class AvatarGrid extends Component {
-  onAvatarClick = () => this.props.setAvatar(this.props.name);
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isSelected: false
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.iconName === nextProps.chatAvatar) {
+      this.setState({ isSelected: true });
+    } else {
+      this.setState({ isSelected: false });
+    }
+  }
+
+  onAvatarClick = () => this.props.setAvatar(this.props.iconName);
 
   renderIcon = () => {
     const { iconName, classes } = this.props;
@@ -51,7 +67,7 @@ class AvatarGrid extends Component {
           className={classes.button}
           onClick={this.onAvatarClick}
           variant="fab"
-          color="primary"
+          color={this.state.isSelected ? 'secondary' : 'primary'}
           disableRipple
           disableTouchRipple
         >
@@ -67,6 +83,10 @@ AvatarGrid.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
+const mapStateToProps = state => ({
+  chatAvatar: state.chat.avatar
+});
+
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
@@ -77,7 +97,7 @@ const mapDispatchToProps = dispatch =>
 
 export default compose(
   connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
   ),
   withStyles(styles)
