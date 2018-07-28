@@ -13,3 +13,10 @@ export const setMode = mode => dispatch => {
     payload: mode
   });
 };
+
+export const sendMessage = message => dispatch => {
+  dispatch({
+    type: TYPES.SEND_MESSAGE,
+    payload: message
+  });
+};
