@@ -34,9 +34,19 @@ class TypeArea extends Component {
     };
   }
 
-  onMessageEnter = ({ target: { value } }) => {
-    this.setState({ message: value });
-  };
+  componentDidMount() {
+    document.getElementById('type_area').focus();
+    
+    document.getElementById('type_area').addEventListener('keyup', (e) => {
+      e.preventDefault();
+
+      if (e.keyCode === 13) {
+        this.onSendMessage();
+      }
+    });
+  }
+
+  onMessageEnter = ({ target: { value }}) => this.setState({ message: value });
 
   onSendMessage = () => {
     this.props.sendMessage({
@@ -46,6 +56,8 @@ class TypeArea extends Component {
     });
 
     this.setState({ message: '' });
+
+    document.getElementById('type_area').focus();
   };
 
   render() {
@@ -60,7 +72,6 @@ class TypeArea extends Component {
           onChange={this.onMessageEnter}
           placeholder="Please enter your message"
           disabled={this.props.disabled}
-          multiline
         />
         <Button
           className={classes.sendButton}
