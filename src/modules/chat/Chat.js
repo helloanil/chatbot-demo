@@ -4,14 +4,7 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 
 import { sendMessage } from '../../store/actions/ChatActions';
-import {
-  messageFroms,
-  chatModes,
-  liveSupportChat,
-  INITIAL_BOT_ID,
-  INITIAL_LIVE_ID,
-  botSupportChat
-} from '../../constants';
+import { messageFroms, chatMessages, initialMessageIds } from '../../constants';
 
 import ChatArea from './ChatArea';
 import TypeArea from './TypeArea';
@@ -37,8 +30,8 @@ class Chat extends Component {
 
   componentDidUpdate(prevProps) {
     if (
-      prevProps.lastMessageFrom !== messageFroms.USER &&
-      this.props.lastMessageFrom === messageFroms.USER
+      prevProps.lastMessage.messageFrom !== messageFroms.USER &&
+      this.props.lastMessage.messageFrom === messageFroms.USER
     ) {
       this.handleBotResponse();
     }
@@ -51,50 +44,95 @@ class Chat extends Component {
       messageText: 'Hello, I am a bot :)'
     });
 
+    const initalMessageId = initialMessageIds[this.props.mode];
+
     this.props.sendMessage({
       messageAt: Date.now() + 1,
       messageFrom: messageFroms.BOT,
-      messageText:
-        this.props.mode === chatModes.BOT_SUPPORT
-          ? botSupportChat[INITIAL_BOT_ID].messageText
-          : liveSupportChat[INITIAL_LIVE_ID].messageText,
-      botMessageId:
-        this.props.mode === chatModes.BOT_SUPPORT
-          ? INITIAL_BOT_ID
-          : INITIAL_LIVE_ID
+      messageText: chatMessages[initalMessageId].messageText,
+      botMessageId: initalMessageId
     });
   };
 
   handleBotResponse = () => {
-    const nextMessage = this.getNextMessageFromConstants();
+    let nextMessage = null;
+    const expectedResponses =
+      chatMessages[this.props.lastBotMessageId].expectedResponses;
+
+    if (
+      expectedResponses.length > 0 &&
+      !this.checkIfLastMessageWasExpectedResponse(expectedResponses)
+    ) {
+      nextMessage = {
+        messageText: `I could not understand it. ${
+          chatMessages[this.props.lastBotMessageId].messageText
+        }`,
+        messageId: this.props.lastBotMessageId
+      };
+    } else {
+      nextMessage = this.getNextMessageFromConstants();
+    }
 
     if (nextMessage) {
       this.props.sendMessage({
         messageAt: Date.now(),
         messageFrom: messageFroms.BOT,
-        messageText:
-          this.props.mode === chatModes.BOT_SUPPORT
-            ? 'SUPPORT'
-            : nextMessage.messageText,
+        messageText: nextMessage.messageText,
         botMessageId: nextMessage.messageId
       });
-    } else {
-      this.setState({ isTypeDisabled: true });
+
+      if (nextMessage.nextMessageId === -1) {
+        this.setState({ isTypeDisabled: true });
+      }
     }
+  };
+
+  checkIfLastMessageWasExpectedResponse = expectedResponses => {
+    let isExpectedResponse = false;
+
+    expectedResponses.forEach(response => {
+      if (response.responseText === this.props.lastMessage.messageText) {
+        isExpectedResponse = true;
+      }
+    });
+
+    return isExpectedResponse;
   };
 
   getNextMessageFromConstants = () => {
     const { lastBotMessageId } = this.props;
 
     if (lastBotMessageId !== null) {
-      const nextMessageId = liveSupportChat[lastBotMessageId].nextMessageId;
+      let nextMessageId = -1;
+      const expectedResponses =
+        chatMessages[this.props.lastBotMessageId].expectedResponses;
+
+      if (this.checkIfLastMessageWasExpectedResponse(expectedResponses)) {
+        nextMessageId = this.getNextMessageOfExpectedResponse(
+          expectedResponses
+        );
+      } else {
+        nextMessageId = chatMessages[lastBotMessageId].nextMessageId;
+      }
 
       if (nextMessageId > -1) {
-        return liveSupportChat[nextMessageId];
+        return chatMessages[nextMessageId];
       }
 
       return null;
     }
+  };
+
+  getNextMessageOfExpectedResponse = expectedResponses => {
+    let nextMessageId = -1;
+
+    expectedResponses.forEach(response => {
+      if (response.responseText === this.props.lastMessage.messageText) {
+        nextMessageId = response.nextMessageId;
+      }
+    });
+
+    return nextMessageId;
   };
 
   render() {
@@ -111,7 +149,7 @@ class Chat extends Component {
 
 const mapStateToProps = state => ({
   mode: state.chat.mode,
-  lastMessageFrom: state.chat.lastMessageFrom,
+  lastMessage: state.chat.lastMessage,
   lastBotMessageId: state.chat.lastBotMessageId,
   chatLog: state.chat.chatLog
 });

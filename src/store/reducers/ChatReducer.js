@@ -7,6 +7,7 @@ export const TYPES = {
 const initalState = {
   avatar: null,
   mode: null,
+  lastMessage: {},
   lastMessageFrom: null,
   lastBotMessageId: null,
   chatLog: []
@@ -31,7 +32,7 @@ export default (state = initalState, action) => {
 
       return {
         ...state,
-        lastMessageFrom: action.payload.messageFrom,
+        lastMessage: action.payload,
         lastBotMessageId:
           action.payload.botMessageId !== undefined // To include 0
             ? action.payload.botMessageId

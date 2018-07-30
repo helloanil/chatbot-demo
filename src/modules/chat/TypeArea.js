@@ -14,7 +14,8 @@ import Send from '@material-ui/icons/Send';
 
 const styles = {
   root: {
-    display: 'flex'
+    display: 'flex',
+    padding: '20px 0'
   },
   textField: {
     width: '85%'
@@ -53,6 +54,7 @@ class TypeArea extends Component {
     return (
       <div className={classes.root}>
         <TextField
+          id="type_area"
           className={classes.textField}
           value={this.state.message}
           onChange={this.onMessageEnter}
@@ -65,6 +67,7 @@ class TypeArea extends Component {
           onClick={this.onSendMessage}
           variant="fab"
           color="primary"
+          disabled={this.props.disabled}
           mini
         >
           <Send />

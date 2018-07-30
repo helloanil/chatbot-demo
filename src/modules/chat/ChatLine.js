@@ -12,7 +12,8 @@ import Android from '@material-ui/icons/Android';
 const styles = {
   root: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    padding: '5px 0'
   },
   rootBot: {
     flexDirection: 'row-reverse'
@@ -46,7 +47,7 @@ const ChatLine = props => (
     ) : (
       <Android />
     )}
-    <pre className={props.classes.text}>{props.message.messageText}</pre>
+    <div className={props.classes.text}>{props.message.messageText}</div>
   </div>
 );
 

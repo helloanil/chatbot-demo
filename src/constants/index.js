@@ -8,7 +8,7 @@ export const messageFroms = {
   USER: 'USER'
 };
 
-export const liveSupportChat = {
+export const chatMessages = {
   0: {
     messageId: 0,
     messageText: 'What is your name?',
@@ -32,10 +32,7 @@ export const liveSupportChat = {
     messageText: 'Support will contact you!',
     expectedResponses: [],
     nextMessageId: -1
-  }
-};
-
-export const botSupportChat = {
+  },
   4: {
     messageId: 4,
     messageText: 'What is the problem?',
@@ -84,5 +81,7 @@ export const botSupportChat = {
   }
 };
 
-export const INITIAL_LIVE_ID = 0;
-export const INITIAL_BOT_ID = 4;
+export const initialMessageIds = {
+  LIVE_SUPPORT: 0,
+  BOT_SUPPORT: 4
+};
